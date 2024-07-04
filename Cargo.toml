@@ -1,0 +1,45 @@
+[package]
+name = "esp-hal-smoketest"
+version = "0.1.0"
+authors = ["Dániel Buga <bugadani@gmail.com>"]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+defmt = "0.3.6"
+defmt-rtt = "0.4.0"
+esp-backtrace = { version = "0.13.0", features = [
+    "exception-handler",
+    "panic-handler",
+    "defmt",
+    "esp32s3"
+] }
+esp-hal = { version = "0.19.0", features = ["esp32s3"] }
+esp-println = { version = "0.10.0", features = ["esp32s3"] }
+
+[dev-dependencies]
+embedded-test = { version = "0.4.0", features = [
+  "panic-handler",
+  "defmt",
+  "embassy",
+  "external-executor",
+  "xtensa-semihosting",
+] }
+
+[[test]]
+name = "example_test"
+harness = false
+
+[profile.dev]
+# Rust debug is too slow.
+# For debug builds always builds with some optimization
+opt-level = "s"
+
+[profile.release]
+codegen-units = 1 # LLVM can perform better optimizations using a single thread
+debug = 2
+debug-assertions = false
+incremental = false
+lto = 'fat'
+opt-level = 's'
+overflow-checks = false

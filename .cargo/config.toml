@@ -1,0 +1,16 @@
+[alias]
+tt = "test --target xtensa-esp32s3-none-elf --test example_test"
+
+[target.xtensa-esp32s3-none-elf]
+runner = "probe-rs run"
+
+[target.'cfg(target_arch = "xtensa")']
+rustflags = [
+    "-C", "link-arg=-nostartfiles",
+]
+
+[unstable]
+build-std = ["core"]
+
+[env]
+DEFMT_LOG = "trace"
